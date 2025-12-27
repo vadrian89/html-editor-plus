@@ -22,32 +22,22 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
-if (flutterMinSdkVersion == null) {
-    flutterMinSdkVersion = '21'
-}
-
-def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
-if (flutterTargetSdkVersion == null) {
-    flutterTargetSdkVersion = '34'
-}
+def flutterMinSdkVersion = 21
+def flutterTargetSdkVersion = 36
 
 android {
     compileSdkVersion flutterTargetSdkVersion.toInteger()
-    ndkVersion flutter.ndkVersion
+    ndkVersion '29.0.14206865'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
-    aaptOptions {
-        noCompress 'html', 'txt'
-    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -68,6 +58,10 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+    }
+    namespace 'com.tanayneotia.html_editor_plus_example'
+    androidResources {
+        noCompress 'html', 'txt'
     }
 }
 
