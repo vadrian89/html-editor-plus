@@ -1,6 +1,7 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
+    // The Kotlin Android plugin is no longer applied here: AGP 9's built-in Kotlin
+    // support (android.builtInKotlin=true in gradle.properties) handles it instead.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -34,11 +35,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -62,6 +58,12 @@ android {
     namespace 'com.tanayneotia.html_editor_plus_example'
     androidResources {
         noCompress 'html', 'txt'
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
