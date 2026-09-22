@@ -94,10 +94,8 @@ class WebScript {
   String name;
   String script;
 
-  WebScript({
-    required this.name,
-    required this.script,
-  }) : assert(name.isNotEmpty && script.isNotEmpty);
+  WebScript({required this.name, required this.script})
+    : assert(name.isNotEmpty && script.isNotEmpty);
 }
 
 /// Delegate for the icon that controls the expansion status of the toolbar
@@ -115,15 +113,9 @@ class ExpandIconDelegate extends SliverPersistentHeaderDelegate {
       width: _size,
       color: Theme.of(context).scaffoldBackgroundColor,
       child: IconButton(
-        constraints: BoxConstraints(
-          maxHeight: _size!,
-          maxWidth: _size!,
-        ),
-        iconSize: _size! * 3 / 5,
-        icon: Icon(
-          _isExpanded ? Icons.expand_less : Icons.expand_more,
-          color: Colors.grey,
-        ),
+        constraints: BoxConstraints(maxHeight: _size!, maxWidth: _size),
+        iconSize: _size * 3 / 5,
+        icon: Icon(_isExpanded ? Icons.expand_less : Icons.expand_more, color: Colors.grey),
         onPressed: () async {
           _setState.call();
         },
@@ -166,12 +158,12 @@ class _DropdownMenuPainter extends CustomPainter {
     this.selectedIndex,
     required this.resize,
     required this.getSelectedItemOffset,
-  })  : _painter = BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(2.0),
-          boxShadow: kElevationToShadow[elevation],
-        ).createBoxPainter(),
-        super(repaint: resize);
+  }) : _painter = BoxDecoration(
+         color: color,
+         borderRadius: BorderRadius.circular(2.0),
+         boxShadow: kElevationToShadow[elevation],
+       ).createBoxPainter(),
+       super(repaint: resize);
 
   final Color? color;
   final int? elevation;
@@ -258,15 +250,13 @@ class _DropdownMenuItemButtonState<T> extends State<_DropdownMenuItemButton<T>> 
 
     dropdownMenuItem.onTap?.call();
 
-    Navigator.pop(
-      context,
-      _DropdownRouteResult<T>(dropdownMenuItem.value),
-    );
+    Navigator.pop(context, _DropdownRouteResult<T>(dropdownMenuItem.value));
   }
 
   static final Map<LogicalKeySet, Intent> _webShortcuts = <LogicalKeySet, Intent>{
-    LogicalKeySet(LogicalKeyboardKey.arrowDown):
-        const DirectionalFocusIntent(TraversalDirection.down),
+    LogicalKeySet(LogicalKeyboardKey.arrowDown): const DirectionalFocusIntent(
+      TraversalDirection.down,
+    ),
     LogicalKeySet(LogicalKeyboardKey.arrowUp): const DirectionalFocusIntent(TraversalDirection.up),
   };
 
@@ -287,17 +277,11 @@ class _DropdownMenuItemButtonState<T> extends State<_DropdownMenuItemButton<T>> 
         autofocus: widget.itemIndex == widget.route.selectedIndex,
         onTap: _handleOnTap,
         onFocusChange: _handleFocusChange,
-        child: Container(
-          padding: widget.padding,
-          child: widget.route.items[widget.itemIndex],
-        ),
+        child: Container(padding: widget.padding, child: widget.route.items[widget.itemIndex]),
       ),
     );
     if (kIsWeb) {
-      child = Shortcuts(
-        shortcuts: _webShortcuts,
-        child: child,
-      );
+      child = Shortcuts(shortcuts: _webShortcuts, child: child);
     }
     return child;
   }
@@ -420,12 +404,7 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
       maxHeight = route.menuMaxHeight!;
     }
     final width = min(constraints.maxWidth, buttonRect.width);
-    return BoxConstraints(
-      minWidth: width,
-      maxWidth: width,
-      minHeight: 0.0,
-      maxHeight: maxHeight,
-    );
+    return BoxConstraints(minWidth: width, maxWidth: width, minHeight: 0.0, maxHeight: maxHeight);
   }
 
   @override
@@ -528,7 +507,10 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
 
   @override
   Widget buildPage(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return _DropdownRoutePage<T>(
@@ -557,8 +539,9 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
     var offset = kMaterialListPadding.top;
     if (items.isNotEmpty && index > 0) {
       assert(items.length == itemHeights.length);
-      offset +=
-          itemHeights.sublist(0, index).reduce((double total, double height) => total + height);
+      offset += itemHeights
+          .sublist(0, index)
+          .reduce((double total, double height) => total + height);
     }
     return offset;
   }
@@ -669,11 +652,7 @@ class _DropdownRoutePage<T> extends StatelessWidget {
 }
 
 class _MenuItem<T> extends SingleChildRenderObjectWidget {
-  const _MenuItem({
-    super.key,
-    required this.onLayout,
-    required this.item,
-  }) : super(child: item);
+  const _MenuItem({super.key, required this.onLayout, required this.item}) : super(child: item);
 
   final ValueChanged<Size> onLayout;
   final CustomDropdownMenuItem<T>? item;
@@ -702,10 +681,7 @@ class _RenderMenuItem extends RenderProxyBox {
 }
 
 class _DropdownMenuItemContainer extends StatelessWidget {
-  const _DropdownMenuItemContainer({
-    super.key,
-    required this.child,
-  });
+  const _DropdownMenuItemContainer({super.key, required this.child});
 
   final Widget child;
 
@@ -720,22 +696,14 @@ class _DropdownMenuItemContainer extends StatelessWidget {
 }
 
 class CustomDropdownMenuItem<T> extends _DropdownMenuItemContainer {
-  const CustomDropdownMenuItem({
-    super.key,
-    this.onTap,
-    this.value,
-    required super.child,
-  });
+  const CustomDropdownMenuItem({super.key, this.onTap, this.value, required super.child});
 
   final VoidCallback? onTap;
   final T? value;
 }
 
 class CustomDropdownButtonHideUnderline extends InheritedWidget {
-  const CustomDropdownButtonHideUnderline({
-    super.key,
-    required super.child,
-  });
+  const CustomDropdownButtonHideUnderline({super.key, required super.child});
 
   static bool at(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<CustomDropdownButtonHideUnderline>() != null;
@@ -771,20 +739,20 @@ class CustomDropdownButton<T> extends StatefulWidget {
     this.dropdownColor,
     this.menuMaxHeight,
     required this.menuDirection,
-  })  : assert(
-          items == null ||
-              items.isEmpty ||
-              value == null ||
-              items.where((CustomDropdownMenuItem<T> item) {
-                    return item.value == value;
-                  }).length ==
-                  1,
-          "There should be exactly one item with [DropdownButton]'s value: "
-          '$value. \n'
-          'Either zero or 2 or more [DropdownMenuItem]s were detected '
-          'with the same value',
-        ),
-        assert(itemHeight == null || itemHeight >= kMinInteractiveDimension);
+  }) : assert(
+         items == null ||
+             items.isEmpty ||
+             value == null ||
+             items.where((CustomDropdownMenuItem<T> item) {
+                   return item.value == value;
+                 }).length ==
+                 1,
+         "There should be exactly one item with [DropdownButton]'s value: "
+         '$value. \n'
+         'Either zero or 2 or more [DropdownMenuItem]s were detected '
+         'with the same value',
+       ),
+       assert(itemHeight == null || itemHeight >= kMinInteractiveDimension);
 
   final DropdownMenuDirection menuDirection;
   final List<CustomDropdownMenuItem<T>>? items;
@@ -853,8 +821,9 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _removeDropdownRoute();
-    WidgetsBinding.instance.focusManager
-        .removeHighlightModeListener(_handleFocusHighlightModeChange);
+    WidgetsBinding.instance.focusManager.removeHighlightModeListener(
+      _handleFocusHighlightModeChange,
+    );
     focusNode!.removeListener(_handleFocusChanged);
     _internalNode?.dispose();
     super.dispose();
@@ -908,10 +877,10 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
       return;
     }
 
-    assert(widget.items!
-            .where((CustomDropdownMenuItem<T> item) => item.value == widget.value)
-            .length ==
-        1);
+    assert(
+      widget.items!.where((CustomDropdownMenuItem<T> item) => item.value == widget.value).length ==
+          1,
+    );
     for (var itemIndex = 0; itemIndex < widget.items!.length; itemIndex++) {
       if (widget.items![itemIndex].value == widget.value) {
         _selectedIndex = itemIndex;
@@ -924,8 +893,9 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
 
   void _handleTap() {
     final textDirection = Directionality.maybeOf(context);
-    final menuMargin =
-        ButtonTheme.of(context).alignedDropdown ? _kAlignedMenuMargin : _kUnalignedMenuMargin;
+    final menuMargin = ButtonTheme.of(context).alignedDropdown
+        ? _kAlignedMenuMargin
+        : _kUnalignedMenuMargin;
 
     final menuItems = <_MenuItem<T>>[
       for (int index = 0; index < widget.items!.length; index += 1)
@@ -946,7 +916,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
     final itemBox = context.findRenderObject()! as RenderBox;
     final itemRect =
         itemBox.localToGlobal(Offset.zero, ancestor: navigator.context.findRenderObject()) &
-            itemBox.size;
+        itemBox.size;
 
     _dropdownRoute = _DropdownRoute<T>(
       items: menuItems,
@@ -1048,14 +1018,17 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
       }
 
       hintIndex = items.length;
-      items.add(DefaultTextStyle(
-        style: _textStyle!.copyWith(color: Theme.of(context).hintColor),
-        child: ExcludeSemantics(child: IgnorePointer(child: displayedHint)),
-      ));
+      items.add(
+        DefaultTextStyle(
+          style: _textStyle!.copyWith(color: Theme.of(context).hintColor),
+          child: ExcludeSemantics(child: IgnorePointer(child: displayedHint)),
+        ),
+      );
     }
 
-    final padding =
-        ButtonTheme.of(context).alignedDropdown ? _kAlignedButtonPadding : _kUnalignedButtonPadding;
+    final padding = ButtonTheme.of(context).alignedDropdown
+        ? _kAlignedButtonPadding
+        : _kUnalignedButtonPadding;
 
     final Widget innerItemsWidget;
     if (items.isEmpty) {
@@ -1093,10 +1066,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
           children: <Widget>[
             if (widget.isExpanded) Expanded(child: innerItemsWidget) else innerItemsWidget,
             IconTheme(
-              data: IconThemeData(
-                color: _iconColor,
-                size: widget.iconSize,
-              ),
+              data: IconThemeData(color: _iconColor, size: widget.iconSize),
               child: widget.icon ?? defaultIcon,
             ),
           ],
@@ -1113,16 +1083,12 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>> with Widget
             left: 0.0,
             right: 0.0,
             bottom: bottom,
-            child: widget.underline ??
+            child:
+                widget.underline ??
                 Container(
                   height: 1.0,
                   decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xFFBDBDBD),
-                        width: 0.0,
-                      ),
-                    ),
+                    border: Border(bottom: BorderSide(color: Color(0xFFBDBDBD), width: 0.0)),
                   ),
                 ),
           ),

@@ -16,3 +16,7 @@ example/.vscode
 # FVM Version Cache
 .fvm/
 example/android/app/.gradle/config.properties
+example/ios/Flutter/ephemeral/flutter_native_integration.env
+example/ios/Flutter/ephemeral/flutter_lldb_helper.py
+.gitignore
+example/ios/Flutter/ephemeral/flutter_lldbinit

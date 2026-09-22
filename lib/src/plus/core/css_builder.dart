@@ -45,28 +45,24 @@ class CssBuilder {
 
   /// Build the css for the Summernote editor, using [Theme.colorScheme] to adhere to Material 2.0.
   static String editor({required ColorScheme colorScheme}) => elementCss(
-        selector: '.note-editable',
-        properties: {
-          'color': hexFromColor(color: colorScheme.onSurface),
-          'background-color': hexFromColor(color: colorScheme.surface),
-        },
-      );
+    selector: '.note-editable',
+    properties: {
+      'color': hexFromColor(color: colorScheme.onSurface),
+      'background-color': hexFromColor(color: colorScheme.surface),
+    },
+  );
 
   /// Build the CSS for the Summernote editor, when it's disabled.
   static String editorDisabled({required ThemeData theme}) => elementCss(
-        selector: '.note-editing-area .note-editable[contenteditable=false]',
-        properties: {
-          'background-color': "${hexFromColor(color: theme.disabledColor)}61 !important",
-        },
-      );
+    selector: '.note-editing-area .note-editable[contenteditable=false]',
+    properties: {'background-color': "${hexFromColor(color: theme.disabledColor)}61 !important"},
+  );
 
   /// Build the CSS for the placeholder
   static String placeholder({required ColorScheme colorScheme}) => elementCss(
-        selector: '.note-placeholder',
-        properties: {
-          'color': "${hexFromColor(color: colorScheme.onSurface)}73",
-        },
-      );
+    selector: '.note-placeholder',
+    properties: {'color': "${hexFromColor(color: colorScheme.onSurface)}73"},
+  );
 
   /// Build the CSS for dialog
   static String dialog({required ColorScheme colorScheme}) {
@@ -74,10 +70,7 @@ class CssBuilder {
     final foregroundColor = hexFromColor(color: colorScheme.onSurface);
     final shadowColor = "${hexFromColor(color: colorScheme.shadow)}20";
     final dialog = elementCss(
-      selector: [
-        '.note-dialog',
-        '.note-popover',
-      ].join(','),
+      selector: ['.note-dialog', '.note-popover'].join(','),
       properties: {
         'background-color': backgroundColor,
         'color': foregroundColor,
@@ -143,17 +136,11 @@ class CssBuilder {
     );
     final modalHeader = elementCss(
       selector: '.note-modal-header',
-      properties: {
-        'border': 'none',
-        'border-bottom': "1px solid $borderColor",
-      },
+      properties: {'border': 'none', 'border-bottom': "1px solid $borderColor"},
     );
     final modalfooter = elementCss(
       selector: '.note-modal-footer',
-      properties: {
-        'border': 'none',
-        'border-top': "1px solid $borderColor",
-      },
+      properties: {'border': 'none', 'border-top': "1px solid $borderColor"},
     );
     final foregroundColor = elementCss(
       selector: '.note-modal-content, .note-modal-title, .note-form-label',
@@ -165,74 +152,64 @@ class CssBuilder {
 
   /// Build CSS for text inputs
   static String textInput({required ColorScheme colorScheme}) => elementCss(
-        selector: "input[type=text]",
-        properties: {
-          'color': hexFromColor(color: colorScheme.onSurface),
-          'background-color': hexFromColor(color: colorScheme.surface),
-          'border-color': hexFromColor(color: colorScheme.outline),
-        },
-      );
+    selector: "input[type=text]",
+    properties: {
+      'color': hexFromColor(color: colorScheme.onSurface),
+      'background-color': hexFromColor(color: colorScheme.surface),
+      'border-color': hexFromColor(color: colorScheme.outline),
+    },
+  );
 
   /// Build CSS for close (X) buttons
   static String closeButton({required ColorScheme colorScheme}) => elementCss(
-        selector: ".close",
-        properties: {
-          'color': hexFromColor(color: colorScheme.onSurface),
-        },
-      );
+    selector: ".close",
+    properties: {'color': hexFromColor(color: colorScheme.onSurface)},
+  );
 
   /// Build the CSS for buttons
   static String elevatedButton({required ColorScheme colorScheme}) => elementCss(
-        selector: '.note-btn',
-        properties: {
-          'background-color': hexFromColor(color: colorScheme.primary),
-          'color': hexFromColor(color: colorScheme.onPrimary),
-          'border-color': hexFromColor(color: colorScheme.inversePrimary),
-        },
-      );
+    selector: '.note-btn',
+    properties: {
+      'background-color': hexFromColor(color: colorScheme.primary),
+      'color': hexFromColor(color: colorScheme.onPrimary),
+      'border-color': hexFromColor(color: colorScheme.inversePrimary),
+    },
+  );
 
   /// Build the CSS for buttons when they are hovered/focused =>
   static String buttonsHovered({required ColorScheme colorScheme}) => elementCss(
-        selector: [
-          '.note-btn:hover',
-          '.note-btn:active',
-        ].join(','),
-        properties: {
-          'color': hexFromColor(color: colorScheme.onPrimaryContainer),
-          'background-color': hexFromColor(color: colorScheme.primaryContainer),
-          'border-color': hexFromColor(color: colorScheme.inversePrimary),
-        },
-      );
+    selector: ['.note-btn:hover', '.note-btn:active'].join(','),
+    properties: {
+      'color': hexFromColor(color: colorScheme.onPrimaryContainer),
+      'background-color': hexFromColor(color: colorScheme.primaryContainer),
+      'border-color': hexFromColor(color: colorScheme.inversePrimary),
+    },
+  );
 
   /// Build the CSS to hide the status bar
-  static String statusBar() => elementCss(
-        selector: '.note-statusbar',
-        properties: {'display': 'none'},
-      );
+  static String statusBar() =>
+      elementCss(selector: '.note-statusbar', properties: {'display': 'none'});
 
   /// Build the CSS for URLs
   static String urls({required ColorScheme colorScheme}) => elementCss(
-        selector: [
-          '.note-editable a',
-          '.note-popover a',
-          '.note-editable a:hover',
-          '.note-popover a:hover',
-          '.note-editable a:focus',
-          '.note-popover a:focus',
-        ].join(','),
-        properties: {
-          'color': hexFromColor(color: colorScheme.primary),
-          'text-decoration': 'underline',
-        },
-      );
+    selector: [
+      '.note-editable a',
+      '.note-popover a',
+      '.note-editable a:hover',
+      '.note-popover a:hover',
+      '.note-editable a:focus',
+      '.note-popover a:focus',
+    ].join(','),
+    properties: {
+      'color': hexFromColor(color: colorScheme.primary),
+      'text-decoration': 'underline',
+    },
+  );
 
   /// Build the CSS for Summernote editor
   ///
   /// If [hideStatusBar] is `true`, the status bar will be hidden, using `display: none;` css.s
-  static String buildCss({
-    required ThemeData theme,
-    bool hideStatusBar = true,
-  }) {
+  static String buildCss({required ThemeData theme, bool hideStatusBar = true}) {
     final colorScheme = theme.colorScheme;
     return [
       editor(colorScheme: colorScheme),

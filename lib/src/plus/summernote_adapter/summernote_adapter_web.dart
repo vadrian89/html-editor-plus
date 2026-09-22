@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 
 import 'dart:async';
 import 'dart:convert';
@@ -26,7 +26,8 @@ class SummernoteAdapterWeb extends SummernoteAdapter {
   final Future<bool> Function(Uri? uri)? allowUrlLoading;
 
   @override
-  String get platformSpecificJavascript => '''
+  String get platformSpecificJavascript =>
+      '''
 function handleMessage(e) {
   if (e && e.data && e.data.includes("toIframe")) {
     logDebug("Received toIframe message from parent: " + e.data);
@@ -119,7 +120,8 @@ window.parent.addEventListener('message', handleMessage, false);
   @override
   Future<void> loadSummernote({ThemeData? theme}) async {
     final allowUrlLoading = (await this.allowUrlLoading?.call(null)) ?? true;
-    final summernoteInit = '''
+    final summernoteInit =
+        '''
 ${init(allowUrlLoading: allowUrlLoading)}
 <style>
 ${css(theme: theme)} 
@@ -134,10 +136,7 @@ ${css(theme: theme)}
   }
 
   @override
-  String messageHandler({
-    required EditorCallbacks event,
-    String? payload,
-  }) {
+  String messageHandler({required EditorCallbacks event, String? payload}) {
     final effectivePayload = payload ?? "null";
     return 'window.parent.postMessage(JSON.stringify({"key": "$key", "type": "toDart", "method": "$event", "payload": $effectivePayload}), "*");';
   }
@@ -153,19 +152,19 @@ ${css(theme: theme)}
       EditorCallbacks.onFocus => onFocus?.call(),
       EditorCallbacks.onBlur => onBlur?.call(),
       EditorCallbacks.onImageUpload => onImageUpload?.call(
-          HtmlEditorFile.fromJson(message.payload!),
-        ),
+        HtmlEditorFile.fromJson(message.payload!),
+      ),
       EditorCallbacks.onImageUploadError => onImageUploadError?.call(
-          HtmlEditorUploadError.fromJson(message.payload!),
-        ),
+        HtmlEditorUploadError.fromJson(message.payload!),
+      ),
       EditorCallbacks.onKeyup => onKeyup?.call(int.parse(message.payload!)),
       EditorCallbacks.onKeydown => onKeydown?.call(int.parse(message.payload!)),
       EditorCallbacks.onMouseDown => onMouseDown?.call(),
       EditorCallbacks.onMouseUp => onMouseUp?.call(),
       EditorCallbacks.onUrlPressed => onUrlPressed?.call(message.payload!),
       EditorCallbacks.onSelectionChanged => onSelectionChanged?.call(
-          EditorSelectionState.fromEncodedJson(message.payload!),
-        ),
+        EditorSelectionState.fromEncodedJson(message.payload!),
+      ),
       _ => debugPrint("Uknown message received from iframe: $message"),
     };
   }
@@ -178,23 +177,19 @@ ${css(theme: theme)}
   @override
   void handleEvent(EditorEvent event) {
     const jsonEncoder = JsonEncoder();
-    final message = EditorMessage.fromEvent(
-      key: key,
-      event: event,
-      type: _eventType(event),
-    );
+    final message = EditorMessage.fromEvent(key: key, event: event, type: _eventType(event));
     html.window.postMessage(jsonEncoder.convert(message.toJson()), '*');
   }
 
   String _eventType(EditorEvent event) => switch (event) {
-        EditorReload() => "toIframe",
-        EditorSetHtml() => "toIframe",
-        EditorSetCursorToEnd() => "toIframe",
-        EditorCreateLink() => "toIframe",
-        EditorInsertImageLink() => "toIframe",
-        EditorToggleView() => "toIframe",
-        _ => "toSummernote",
-      };
+    EditorReload() => "toIframe",
+    EditorSetHtml() => "toIframe",
+    EditorSetCursorToEnd() => "toIframe",
+    EditorCreateLink() => "toIframe",
+    EditorInsertImageLink() => "toIframe",
+    EditorToggleView() => "toIframe",
+    _ => "toSummernote",
+  };
 
   static html.IFrameElement _initIframe(String viewId) {
     final iframe = html.IFrameElement();

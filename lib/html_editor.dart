@@ -1,5 +1,3 @@
-library html_editor;
-
 export 'package:html_editor_plus/src/widgets/toolbar_widget.dart';
 export 'package:html_editor_plus/utils/callbacks.dart';
 export 'package:html_editor_plus/utils/toolbar.dart';
@@ -76,7 +74,7 @@ enum ButtonType {
   redo,
   help,
   copy,
-  paste
+  paste,
 }
 
 /// Returns the type of dropdown changed in the `onDropdownChanged` function

@@ -43,13 +43,7 @@ class EditorMessage {
     required String key,
     required EditorEvent event,
     String type = "toSummernote",
-  }) =>
-      EditorMessage(
-        key: key,
-        method: event.method,
-        payload: event.payload,
-        type: type,
-      );
+  }) => EditorMessage(key: key, method: event.method, payload: event.payload, type: type);
 
   factory EditorMessage.fromJson(Map<String, dynamic> map) {
     return EditorMessage(
@@ -60,12 +54,7 @@ class EditorMessage {
     );
   }
 
-  EditorMessage copyWith({
-    String? key,
-    String? type,
-    String? method,
-    String? payload,
-  }) {
+  EditorMessage copyWith({String? key, String? type, String? method, String? payload}) {
     return EditorMessage(
       key: key ?? this.key,
       type: type ?? this.type,
@@ -75,11 +64,11 @@ class EditorMessage {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "key": key,
-        "type": type,
-        "method": method.toString(),
-        if (payload != null) "payload": payload,
-      };
+    "key": key,
+    "type": type,
+    "method": method.toString(),
+    if (payload != null) "payload": payload,
+  };
 
   @override
   String toString() => "EditorMessage(key: $key, type: $type, event: $method, payload: $payload)";

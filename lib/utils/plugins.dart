@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 abstract class Plugins {
   const Plugins();
 
-  /// Provides the JS and CSS tags to be inserted inside <head>. Only used for Web
+  /// Provides the JS and CSS tags to be inserted inside `<head>`. Only used for Web
   String getHeadString();
 
   /// Provides the toolbar option for the plugin
@@ -31,7 +31,7 @@ class SummernoteAtMention extends Plugins {
   final void Function(String)? onSelect;
 
   const SummernoteAtMention({this.getSuggestionsMobile, this.mentionsWeb, this.onSelect})
-      : assert(kIsWeb ? mentionsWeb != null : getSuggestionsMobile != null);
+    : assert(kIsWeb ? mentionsWeb != null : getSuggestionsMobile != null);
 
   @override
   String getHeadString() {

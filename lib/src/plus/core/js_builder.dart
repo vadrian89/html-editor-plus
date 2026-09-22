@@ -20,9 +20,9 @@ class JsBuilder {
 
   /// Build the jquery ready function.
   static String jqReady({required String body}) => functionCall(
-        name: "\$(document).ready",
-        args: [callbackClosure(body: body)],
-      );
+    name: "\$(document).ready",
+    args: [callbackClosure(body: body)],
+  );
 
   /// Build the declaration of a javascript function.
   ///
@@ -33,13 +33,13 @@ class JsBuilder {
     required String name,
     List<String> args = const [],
     required String body,
-  }) =>
-      "function $name(${args.join(",")}) { $body }";
+  }) => "function $name(${args.join(",")}) { $body }";
 
   /// Build a closure for a javascript callback.
   ///
   /// [args] are the parameters accepted by the function.
-  static String callbackClosure({List<String> args = const [], required String body}) => '''
+  static String callbackClosure({List<String> args = const [], required String body}) =>
+      '''
     function(${args.join(', ')}) {
       $body
     }
@@ -56,8 +56,7 @@ class JsBuilder {
     required String event,
     List<String> args = const [],
     required String body,
-  }) =>
-      "$selector.addEventListener('$event', ${callbackClosure(args: args, body: body)});";
+  }) => "$selector.addEventListener('$event', ${callbackClosure(args: args, body: body)});";
 
   /// Build a jQuery event listener
   ///
@@ -71,8 +70,7 @@ class JsBuilder {
     required String event,
     List<String> args = const [],
     required String body,
-  }) =>
-      "\$($selector).on('$event', ${callbackClosure(args: args, body: body)});";
+  }) => "\$($selector).on('$event', ${callbackClosure(args: args, body: body)});";
 
   /// Build an event callback for the summernote editor initialiser.
   ///
@@ -81,17 +79,14 @@ class JsBuilder {
   static String summernoteCallback({
     required EditorCallbacks event,
     required String Function(EditorCallbacks event) body,
-  }) =>
-      "${event.callback}: ${callbackClosure(
-        args: event.args,
-        body: body(event),
-      )}";
+  }) => "${event.callback}: ${callbackClosure(args: event.args, body: body(event))}";
 
   /// Build a JS object represeting file upload which will be uploaded.
   ///
   /// [fileNode] is the node containing the file data.
   /// [hasBase64] is a flag to indicate if the file has base64 data.
-  static String fileObject({required String fileNode, bool hasBase64 = true}) => '''
+  static String fileObject({required String fileNode, bool hasBase64 = true}) =>
+      '''
     {
       'lastModified': $fileNode.lastModified,
       'lastModifiedDate': $fileNode.lastModifiedDate,
@@ -110,24 +105,24 @@ class JsBuilder {
   static String summernoteMethodCall({
     String selector = "'#summernote-2'",
     List<String> args = const [],
-  }) =>
-      "\$($selector).summernote(${args.join(",")});";
+  }) => "\$($selector).summernote(${args.join(",")});";
 
   /// Build the declaration of a function which will resize the editor to the width and height to the parent (window).
-  static String resizeToParent() => function(name: "resizeToParent", body: '''
+  static String resizeToParent() => function(
+    name: "resizeToParent",
+    body:
+        '''
 ${logDebugCall(message: "Resizing to parent", wrapInQuotes: true)}
 ${editorHeight(height: "window.innerHeight")}
 ${editorWidth(width: "window.innerWidth")}
-''');
+''',
+  );
 
   /// Build a function which log debug data to the console.
   ///
   /// It will only work if the app is running in debug mode (`kDebugMode == true`).
-  static String logDebug() => function(
-        name: "logDebug",
-        args: ["message"],
-        body: "if ($kDebugMode) console.log(message);",
-      );
+  static String logDebug() =>
+      function(name: "logDebug", args: ["message"], body: "if ($kDebugMode) console.log(message);");
 
   /// Build code which calls logDebug function.
   ///
@@ -136,10 +131,8 @@ ${editorWidth(width: "window.innerWidth")}
   /// text will not be wrapped in aditional quotes it will be treated as a JS identifier. It's
   /// default `false` because the developer needs make concatenations most of the time.  ///
   /// DON'T FORGET TO SET [wrapInQuotes] TO TRUE IF YOU ARE PASSING A STRING LITERAL.
-  static String logDebugCall({required String message, bool wrapInQuotes = false}) => functionCall(
-        name: 'logDebug',
-        args: [wrapInQuotes ? "'$message'" : message],
-      );
+  static String logDebugCall({required String message, bool wrapInQuotes = false}) =>
+      functionCall(name: 'logDebug', args: [wrapInQuotes ? "'$message'" : message]);
 
   /// Build a function which will change editor's height.
   ///
@@ -155,25 +148,24 @@ ${editorWidth(width: "window.innerWidth")}
 
   /// Build a function which will toggle to/from code view.
   static String toggleCodeView({bool resizeToParent = false}) => function(
-        name: "toggleCodeView",
-        body: '''
+    name: "toggleCodeView",
+    body:
+        '''
 ${summernoteMethodCall(args: ["'codeview.toggle'"])}
 if ($resizeToParent) resizeToParent();
 ''',
-      );
+  );
 
   /// Build a function which creates and inserts a link.
   static String createLink() {
     final summernoteCall = summernoteMethodCall(
-      args: [
-        "'createLink'",
-        '{text: text, url: url, isNewWindow: data["isNewWindow"]}',
-      ],
+      args: ["'createLink'", '{text: text, url: url, isNewWindow: data["isNewWindow"]}'],
     );
     return function(
       name: "createLink",
       args: ["payload"],
-      body: '''
+      body:
+          '''
   const data = JSON.parse(payload);
   const text = data["text"];
   const url = data["url"];
@@ -184,22 +176,21 @@ if ($resizeToParent) resizeToParent();
 
   /// Build a function which moves the cursor to the end of the editor.
   static String setCursorToEnd() => function(
-        name: "setCursorToEnd",
-        body: '''
-${summernoteMethodCall(args: [
-              "'setLastRange'",
-              "\$.summernote.range.createFromNodeAfter($editorSelector[0]).select()"
-            ])}
+    name: "setCursorToEnd",
+    body:
+        '''
+${summernoteMethodCall(args: ["'setLastRange'", "\$.summernote.range.createFromNodeAfter($editorSelector[0]).select()"])}
 ''',
-      );
+  );
 
   /// Build a function which sets the html value of the editor.
   ///
   /// This replaces the current html value of the editor.
   static String setHtml() => function(
-        name: "setHtml",
-        args: ["value"],
-        body: '''
+    name: "setHtml",
+    args: ["value"],
+    body:
+        '''
 const currentValue = ${summernoteMethodCall(args: ["'code'"])}
 ${logDebugCall(message: '"Current value: "+ currentValue')}
 if (value == currentValue) return;
@@ -207,20 +198,21 @@ ${logDebugCall(message: '"Setting value: " + value')}
 ${summernoteMethodCall(args: ["'code'", 'value'])}
 ${functionCall(name: "setCursorToEnd")}
 ''',
-      );
+  );
 
   /// Build a function which inserts an image URL.
   static String insertImageUrl() => function(
-        name: "insertImage",
-        args: ["payload"],
-        body: '''
+    name: "insertImage",
+    args: ["payload"],
+    body:
+        '''
 ${logDebugCall(message: '"Inserting image: " + payload')}
 const data = JSON.parse(payload);
 const url = data["url"];
 const filename = data["filename"];
 ${summernoteMethodCall(args: ["'insertImage'", 'url, filename'])}
 ''',
-      );
+  );
 
   /// Build a function which handles file uploads.
   ///
@@ -229,11 +221,11 @@ ${summernoteMethodCall(args: ["'insertImage'", 'url, filename'])}
   static String fileUpload({
     required String Function(String payload) handlerBuilder,
     required String Function(String payload) errorHandlerBuilder,
-  }) =>
-      function(
-        name: "uploadFile",
-        args: ["file"],
-        body: '''
+  }) => function(
+    name: "uploadFile",
+    args: ["file"],
+    body:
+        '''
 const reader = new FileReader();
 let base64 = "";
 reader.onload = function (e) {
@@ -249,13 +241,14 @@ reader.onerror = function (error) {
 };
 reader.readAsDataURL(file);
 ''',
-      );
+  );
 
   /// Build a function which handles file upload errors.
   static String uploadError({required String Function(String payload) handlerBuilder}) => function(
-        name: "uploadError",
-        args: ["file", "error"],
-        body: '''
+    name: "uploadError",
+    args: ["file", "error"],
+    body:
+        '''
 if (typeof file === 'string') {
   ${handlerBuilder("JSON.stringify({'file': file, 'error': error})")}
 }
@@ -265,17 +258,17 @@ else {
   ${handlerBuilder("JSON.stringify({'file': fileObjectAsString, 'error': error})")}
 }
 ''',
-      );
+  );
 
   /// Build a javascript event listener which listens to link clicks/taps.
   static String onLinkPressedListener({
     bool allowUrlLoading = true,
     String Function(String payload)? handlerBuilder,
-  }) =>
-      eventListener(
-        event: "click",
-        args: ["event"],
-        body: '''
+  }) => eventListener(
+    event: "click",
+    args: ["event"],
+    body:
+        '''
 const target = event.target;
 if (target.tagName.toLowerCase() === "a") {
   if (${!allowUrlLoading}) {
@@ -285,16 +278,14 @@ if (target.tagName.toLowerCase() === "a") {
   ${handlerBuilder?.call("url") ?? ""}
 }
 ''',
-      );
+  );
 
   /// Build the onSelectionChange function.
   ///
   /// [handlerBuilder] is a function which will build the handler function. It will receive the
   /// payload as a parameter.
   /// [key] is the key of the view.
-  static String onSelectionChange({
-    required String Function(String payload)? handlerBuilder,
-  }) =>
+  static String onSelectionChange({required String Function(String payload)? handlerBuilder}) =>
       '''
     function onSelectionChange() {
           let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();

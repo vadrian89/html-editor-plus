@@ -32,8 +32,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void execCommand(String command, {String? argument}) {
     _evaluateJavascript(
-        source:
-            "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});");
+      source: "document.execCommand('$command', false${argument == null ? "" : ", '$argument'"});",
+    );
   }
 
   /// Gets the text from the editor and returns it as a [String].
@@ -46,7 +46,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             text.isEmpty ||
             text == '<p></p>' ||
             text == '<p><br></p>' ||
-            text == '<p><br/></p>')) text = '';
+            text == '<p><br/></p>')) {
+      text = '';
+    }
     return text ?? '';
   }
 
@@ -135,19 +137,23 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void insertNetworkImage(String url, {String filename = ''}) {
     _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
+      source: "\$('#summernote-2').summernote('insertImage', '$url', '$filename');",
+    );
   }
 
   /// Insert a link at the position of the cursor in the editor
   @override
   void insertLink(String text, String url, bool isNewWindow) {
-    _evaluateJavascript(source: """
+    _evaluateJavascript(
+      source:
+          """
     \$('#summernote-2').summernote('createLink', {
         text: "$text",
         url: '$url',
         isNewWindow: $isNewWindow
       });
-    """);
+    """,
+    );
   }
 
   /// Clears the focus from the webview by hiding the keyboard, calling the
@@ -162,7 +168,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void reloadWeb() {
     throw Exception(
-        'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart and check kIsWeb before calling this function');
+      'Non-Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart and check kIsWeb before calling this function',
+    );
   }
 
   /// Resets the height of the editor back to the original if it was changed to
@@ -178,8 +185,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void recalculateHeight() {
     _evaluateJavascript(
-        source:
-            "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
+      source:
+          "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);",
+    );
   }
 
   /// Add a notification to the bottom of the editor. This is styled similar to
@@ -187,11 +195,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// and the notificationType determines how the alert is displayed.
   @override
   void addNotification(String html, NotificationType notificationType) async {
-    await _evaluateJavascript(source: """
+    await _evaluateJavascript(
+      source:
+          """
         \$('.note-status-output').html(
           '<div class="alert alert-${notificationType.name}">$html</div>'
         );
-        """);
+        """,
+    );
     recalculateHeight();
   }
 
@@ -203,7 +214,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Helper function to process input html
-  String _processHtml({required html}) {
+  String _processHtml({required String html}) {
     if (processInputHtml) {
       html = html
           .replaceAll("'", r"\'")
@@ -220,17 +231,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Helper function to evaluate JS and check the current environment
-  dynamic _evaluateJavascript({required source}) async {
+  dynamic _evaluateJavascript({required String source}) async {
     if (!kIsWeb) {
       if (editorController == null || await editorController!.isLoading()) {
         throw Exception(
-            'HTML editor is still loading, please wait before evaluating this JS: $source!');
+          'HTML editor is still loading, please wait before evaluating this JS: $source!',
+        );
       }
       var result = await editorController!.evaluateJavascript(source: source);
       return result;
     } else {
       throw Exception(
-          'Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart');
+        'Flutter Web environment detected, please make sure you are importing package:html_editor_plus/html_editor.dart',
+      );
     }
   }
 

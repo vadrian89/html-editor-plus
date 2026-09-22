@@ -97,7 +97,6 @@ class HtmlEditor extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => const Center(
-        child: Text("Unsupported in this environment"),
-      );
+  Widget build(BuildContext context) =>
+      const Center(child: Text("Unsupported in this environment"));
 }

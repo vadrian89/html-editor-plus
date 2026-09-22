@@ -22,20 +22,20 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def flutterMinSdkVersion = 21
-def flutterTargetSdkVersion = 36
+def flutterMinSdkVersion = 24
+def flutterTargetSdkVersion = 37
 
 android {
     compileSdkVersion flutterTargetSdkVersion.toInteger()
     ndkVersion '29.0.14206865'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 
 

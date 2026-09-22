@@ -9,9 +9,7 @@ abstract class Toolbar {
 class StyleButtons extends Toolbar {
   final bool style;
 
-  const StyleButtons({
-    this.style = true,
-  });
+  const StyleButtons({this.style = true});
 }
 
 /// Font setting group
@@ -20,11 +18,7 @@ class FontSettingButtons extends Toolbar {
   final bool fontSize;
   final bool fontSizeUnit;
 
-  const FontSettingButtons({
-    this.fontName = true,
-    this.fontSize = true,
-    this.fontSizeUnit = true,
-  });
+  const FontSettingButtons({this.fontName = true, this.fontSize = true, this.fontSizeUnit = true});
 }
 
 /// Font group
@@ -70,10 +64,7 @@ class ColorButtons extends Toolbar {
   final bool foregroundColor;
   final bool highlightColor;
 
-  const ColorButtons({
-    this.foregroundColor = true,
-    this.highlightColor = true,
-  });
+  const ColorButtons({this.foregroundColor = true, this.highlightColor = true});
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
@@ -89,11 +80,7 @@ class ListButtons extends Toolbar {
   final bool ol;
   final bool listStyles;
 
-  const ListButtons({
-    this.ul = true,
-    this.ol = true,
-    this.listStyles = true,
-  });
+  const ListButtons({this.ul = true, this.ol = true, this.listStyles = true});
 
   List<Icon> getIcons() {
     var icons = <Icon>[];

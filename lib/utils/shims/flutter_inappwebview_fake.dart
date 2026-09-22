@@ -1,9 +1,7 @@
-library flutter_inappwebview_fake;
+// ignore_for_file: constant_identifier_names
 
 ///Class that is used by [WebView.shouldOverrideUrlLoading] event.
 ///It represents the policy to pass back to the decision handler.
-// ignore_for_file: constant_identifier_names
-
 class NavigationActionPolicy {
   final int _value;
 
@@ -24,9 +22,7 @@ class NavigationActionPolicy {
   int get hashCode => _value.hashCode;
 
   Map<String, dynamic> toMap() {
-    return {
-      'action': _value,
-    };
+    return {'action': _value};
   }
 }
 
@@ -53,17 +49,18 @@ class ContextMenu {
   ///List of the custom [ContextMenuItem].
   final List<ContextMenuItem> menuItems;
 
-  ContextMenu(
-      {this.menuItems = const [],
-      this.onCreateContextMenu,
-      this.onHideContextMenu,
-      this.options,
-      this.onContextMenuActionItemClicked});
+  ContextMenu({
+    this.menuItems = const [],
+    this.onCreateContextMenu,
+    this.onHideContextMenu,
+    this.options,
+    this.onContextMenuActionItemClicked,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'menuItems': menuItems.map((menuItem) => menuItem.toMap()).toList(),
-      'options': options?.toMap()
+      'options': options?.toMap(),
     };
   }
 
@@ -202,12 +199,13 @@ class UserScript {
   ///For more information about content worlds, see [ContentWorld].
   late ContentWorld contentWorld;
 
-  UserScript(
-      {this.groupName,
-      required this.source,
-      required this.injectionTime,
-      this.iosForMainFrameOnly = true,
-      ContentWorld? contentWorld}) {
+  UserScript({
+    this.groupName,
+    required this.source,
+    required this.injectionTime,
+    this.iosForMainFrameOnly = true,
+    ContentWorld? contentWorld,
+  }) {
     this.contentWorld = contentWorld ?? ContentWorld.PAGE;
   }
 
@@ -217,7 +215,7 @@ class UserScript {
       'source': source,
       'injectionTime': injectionTime.toValue(),
       'iosForMainFrameOnly': iosForMainFrameOnly,
-      'contentWorld': contentWorld.toMap()
+      'contentWorld': contentWorld.toMap(),
     };
   }
 
