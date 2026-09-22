@@ -14,8 +14,8 @@ class ControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon),
-        label: Text(label),
-      );
+    onPressed: onPressed,
+    icon: Icon(icon),
+    label: Text(label),
+  );
 }

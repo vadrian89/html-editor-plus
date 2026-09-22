@@ -127,17 +127,10 @@ class EditorCreateLink extends EditorEvent {
   final String url;
 
   @override
-  String get payload => jsonEncode({
-        "text": text,
-        "url": url,
-        "isNewWindow": isNewWindow,
-      });
+  String get payload => jsonEncode({"text": text, "url": url, "isNewWindow": isNewWindow});
 
-  const EditorCreateLink({
-    required this.text,
-    required this.url,
-    this.isNewWindow = true,
-  }) : super("createLink");
+  const EditorCreateLink({required this.text, required this.url, this.isNewWindow = true})
+    : super("createLink");
 
   @override
   bool operator ==(covariant EditorCreateLink other) {
@@ -161,10 +154,7 @@ class EditorInsertImageLink extends EditorEvent {
   @override
   String get payload => jsonEncode({"filename": filename, "url": url});
 
-  const EditorInsertImageLink({
-    required this.filename,
-    required this.url,
-  }) : super("insertImage");
+  const EditorInsertImageLink({required this.filename, required this.url}) : super("insertImage");
 
   @override
   bool operator ==(covariant EditorInsertImageLink other) {

@@ -53,9 +53,8 @@ class SummernoteAdapterInappWebView extends SummernoteAdapter {
   Future<void> loadSummernote({ThemeData? theme}) async {
     _webviewController!.addJavaScriptHandler(
       handlerName: "onSummernoteEvent",
-      callback: (arguments) => handleEditorMessage(
-        EditorMessage.fromJson(jsonDecode(arguments.first.toString())),
-      ),
+      callback: (arguments) =>
+          handleEditorMessage(EditorMessage.fromJson(jsonDecode(arguments.first.toString()))),
     );
     await _webviewController!.injectCSSFileFromAsset(assetFilePath: cssPath);
     await _webviewController!.injectCSSCode(source: css(theme: theme));
@@ -65,10 +64,7 @@ class SummernoteAdapterInappWebView extends SummernoteAdapter {
   }
 
   @override
-  String messageHandler({
-    required EditorCallbacks event,
-    String? payload,
-  }) {
+  String messageHandler({required EditorCallbacks event, String? payload}) {
     final effectivePayload = (payload != null) ? ", 'payload': $payload" : "";
     return 'window.flutter_inappwebview.callHandler("onSummernoteEvent", JSON.stringify({"key": "$key", "type": "toDart", "method": "$event" $effectivePayload}));';
   }
@@ -83,19 +79,19 @@ class SummernoteAdapterInappWebView extends SummernoteAdapter {
       EditorCallbacks.onFocus => onFocus?.call(),
       EditorCallbacks.onBlur => onBlur?.call(),
       EditorCallbacks.onImageUpload => onImageUpload?.call(
-          HtmlEditorFile.fromJson(message.payload!),
-        ),
+        HtmlEditorFile.fromJson(message.payload!),
+      ),
       EditorCallbacks.onImageUploadError => onImageUploadError?.call(
-          HtmlEditorUploadError.fromJson(message.payload!),
-        ),
+        HtmlEditorUploadError.fromJson(message.payload!),
+      ),
       EditorCallbacks.onKeyup => onKeyup?.call(int.parse(message.payload!)),
       EditorCallbacks.onKeydown => onKeydown?.call(int.parse(message.payload!)),
       EditorCallbacks.onMouseUp => onMouseUp?.call(),
       EditorCallbacks.onMouseDown => onMouseDown?.call(),
       EditorCallbacks.onUrlPressed => onUrlPressed?.call(message.payload!),
       EditorCallbacks.onSelectionChanged => onSelectionChanged?.call(
-          EditorSelectionState.fromEncodedJson(message.payload!),
-        ),
+        EditorSelectionState.fromEncodedJson(message.payload!),
+      ),
       _ => debugPrint("Uknown message received from editor: $message"),
     };
   }
@@ -112,26 +108,26 @@ class SummernoteAdapterInappWebView extends SummernoteAdapter {
       EditorReload() => _webviewController!.reload(),
       EditorClearFocus() => SystemChannels.textInput.invokeMethod('TextInput.hide'),
       EditorCallFunction(:final method, :final payload) => JsBuilder.functionCall(
-          name: method,
-          args: [if (payload != null) payload],
-        ),
+        name: method,
+        args: [?payload],
+      ),
       _ => _webviewController!.evaluateJavascript(
-          source: switch (event) {
-            EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
-            EditorResizeToParent(:final method) => "$method();",
-            EditorSetCursorToEnd(:final method) => "$method();",
-            EditorToggleView(:final method) => "$method();",
-            EditorInsertImageLink(:final method, :final payload) =>
-              "$method(${jsonEncode(payload)});",
-            _ => callSummernoteMethod(
-                method: event.method,
-                payload: switch (event) {
-                  EditorCreateLink(:final payload) => payload,
-                  _ => (event.payload != null) ? jsonEncode(event.payload) : null,
-                },
-              ),
-          },
-        ),
+        source: switch (event) {
+          EditorSetHtml(:final method, :final payload) => "$method(${jsonEncode(payload)});",
+          EditorResizeToParent(:final method) => "$method();",
+          EditorSetCursorToEnd(:final method) => "$method();",
+          EditorToggleView(:final method) => "$method();",
+          EditorInsertImageLink(:final method, :final payload) =>
+            "$method(${jsonEncode(payload)});",
+          _ => callSummernoteMethod(
+            method: event.method,
+            payload: switch (event) {
+              EditorCreateLink(:final payload) => payload,
+              _ => (event.payload != null) ? jsonEncode(event.payload) : null,
+            },
+          ),
+        },
+      ),
     });
   }
 

@@ -212,103 +212,80 @@ abstract class SummernoteAdapter {
   /// [method] is the name of the function to call.
   /// [payload] is the value passed to the function.
   /// [wrapMethod] is whether to wrap the method in quotes.
-  String callSummernoteMethod({
-    required String method,
-    String? payload,
-    bool wrapMethod = true,
-  }) {
+  String callSummernoteMethod({required String method, String? payload, bool wrapMethod = true}) {
     final effectiveMethod = wrapMethod ? "'$method'" : method;
-    final args = [effectiveMethod, if (payload != null) payload];
+    final args = [effectiveMethod, ?payload];
     return "$summernoteSelector.summernote(${args.join(",")});";
   }
 
   /// List of helper functions to be added to the summernote initialiser.
   List<String> helperFunctions({bool allowUrlLoading = true}) => [
-        JsBuilder.logDebug(),
-        JsBuilder.resizeToParent(),
-        JsBuilder.setHtml(),
-        JsBuilder.createLink(),
-        JsBuilder.insertImageUrl(),
-        JsBuilder.setCursorToEnd(),
-        JsBuilder.toggleCodeView(resizeToParent: resizeMode == ResizeMode.resizeToParent),
-        JsBuilder.onLinkPressedListener(
-          allowUrlLoading: allowUrlLoading,
-          handlerBuilder: (payload) => messageHandler(
-            event: EditorCallbacks.onUrlPressed,
-            payload: payload,
-          ),
-        ),
-        JsBuilder.fileUpload(
-          handlerBuilder: (payload) => messageHandler(
-            event: EditorCallbacks.onImageUpload,
-            payload: payload,
-          ),
-          errorHandlerBuilder: (payload) => messageHandler(
-            event: EditorCallbacks.onImageUploadError,
-            payload: payload,
-          ),
-        ),
-        JsBuilder.uploadError(
-          handlerBuilder: (payload) => messageHandler(
-            event: EditorCallbacks.onImageUploadError,
-            payload: payload,
-          ),
-        ),
-        JsBuilder.onSelectionChange(
-          handlerBuilder: (payload) => messageHandler(
-            event: EditorCallbacks.onSelectionChanged,
-            payload: payload,
-          ),
-        ),
-      ];
+    JsBuilder.logDebug(),
+    JsBuilder.resizeToParent(),
+    JsBuilder.setHtml(),
+    JsBuilder.createLink(),
+    JsBuilder.insertImageUrl(),
+    JsBuilder.setCursorToEnd(),
+    JsBuilder.toggleCodeView(resizeToParent: resizeMode == ResizeMode.resizeToParent),
+    JsBuilder.onLinkPressedListener(
+      allowUrlLoading: allowUrlLoading,
+      handlerBuilder: (payload) =>
+          messageHandler(event: EditorCallbacks.onUrlPressed, payload: payload),
+    ),
+    JsBuilder.fileUpload(
+      handlerBuilder: (payload) =>
+          messageHandler(event: EditorCallbacks.onImageUpload, payload: payload),
+      errorHandlerBuilder: (payload) =>
+          messageHandler(event: EditorCallbacks.onImageUploadError, payload: payload),
+    ),
+    JsBuilder.uploadError(
+      handlerBuilder: (payload) =>
+          messageHandler(event: EditorCallbacks.onImageUploadError, payload: payload),
+    ),
+    JsBuilder.onSelectionChange(
+      handlerBuilder: (payload) =>
+          messageHandler(event: EditorCallbacks.onSelectionChanged, payload: payload),
+    ),
+  ];
 
   /// List of summernote callbacks to be added to the summernote initialiser.
-  List<String> summernoteCallbacks({
-    int? characterLimit,
-  }) =>
-      [
-        summernoteCallback(event: EditorCallbacks.onInit),
-        summernoteCallback(event: EditorCallbacks.onChange),
-        summernoteCallback(event: EditorCallbacks.onChangeCodeview),
-        if (onFocus != null) summernoteCallback(event: EditorCallbacks.onFocus),
-        if (onBlur != null) summernoteCallback(event: EditorCallbacks.onBlur),
-        if (onImageUpload != null)
-          summernoteCallback(
-            event: EditorCallbacks.onImageUpload,
-            body: "uploadFile(files[0])",
-          ),
-        if (onImageUploadError != null)
-          summernoteCallback(
-            event: EditorCallbacks.onImageUploadError,
-            body: "uploadError(file, error)",
-          ),
-        if (onKeyup != null) summernoteCallback(event: EditorCallbacks.onKeyup),
-        if (onKeydown != null) summernoteCallback(event: EditorCallbacks.onKeydown),
-      ];
+  List<String> summernoteCallbacks({int? characterLimit}) => [
+    summernoteCallback(event: EditorCallbacks.onInit),
+    summernoteCallback(event: EditorCallbacks.onChange),
+    summernoteCallback(event: EditorCallbacks.onChangeCodeview),
+    if (onFocus != null) summernoteCallback(event: EditorCallbacks.onFocus),
+    if (onBlur != null) summernoteCallback(event: EditorCallbacks.onBlur),
+    if (onImageUpload != null)
+      summernoteCallback(event: EditorCallbacks.onImageUpload, body: "uploadFile(files[0])"),
+    if (onImageUploadError != null)
+      summernoteCallback(
+        event: EditorCallbacks.onImageUploadError,
+        body: "uploadError(file, error)",
+      ),
+    if (onKeyup != null) summernoteCallback(event: EditorCallbacks.onKeyup),
+    if (onKeydown != null) summernoteCallback(event: EditorCallbacks.onKeydown),
+  ];
 
   /// List of JS event listeners to be added to the summernote initialiser.
   ///
   /// These are event listeners which couldn't be added as summernote callbacks.
   List<String> jsSummernoteCallbacks() => [
-        JsBuilder.jqEventListener(
-          selector: summernoteSelector,
-          event: "summernote.mouseup",
-          body: messageHandler(event: EditorCallbacks.onMouseUp),
-        ),
-        JsBuilder.jqEventListener(
-          selector: summernoteSelector,
-          event: "summernote.mousedown",
-          body: messageHandler(event: EditorCallbacks.onMouseDown),
-        ),
-      ];
+    JsBuilder.jqEventListener(
+      selector: summernoteSelector,
+      event: "summernote.mouseup",
+      body: messageHandler(event: EditorCallbacks.onMouseUp),
+    ),
+    JsBuilder.jqEventListener(
+      selector: summernoteSelector,
+      event: "summernote.mousedown",
+      body: messageHandler(event: EditorCallbacks.onMouseDown),
+    ),
+  ];
 
   /// Build a summernote callback for the editor.
   ///
   /// If the [body] is not provided, the [messageHandler] will be used.
-  String summernoteCallback({
-    required EditorCallbacks event,
-    String? body,
-  }) =>
+  String summernoteCallback({required EditorCallbacks event, String? body}) =>
       JsBuilder.summernoteCallback(
         event: event,
         body: (event) => body ?? messageHandler(event: event, payload: event.payload),
@@ -316,7 +293,5 @@ abstract class SummernoteAdapter {
 
   /// Build a callable javascript function.
   String javascriptFunction({required String name, String? arg}) =>
-      JsBuilder.functionCall(name: name, args: [
-        if (arg != null) arg,
-      ]);
+      JsBuilder.functionCall(name: name, args: [?arg]);
 }

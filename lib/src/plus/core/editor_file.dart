@@ -34,19 +34,18 @@ class HtmlEditorFile {
   });
 
   factory HtmlEditorFile.fromMap(Map<String, dynamic> map) => HtmlEditorFile(
-        name: map['name'] as String,
-        size: map['size'] != null ? map['size'] as int : null,
-        mimeType: map['mimeType'] != null ? map['mimeType'] as String : null,
-        base64: map['base64'] as String,
-        lastModified: map['lastModified'] != null ? map['lastModified'] as int : null,
-        lastModifiedDate: map['lastModifiedDate'] != null
-            ? DateTime.tryParse(map['lastModifiedDate'] as String)
-            : null,
-      );
+    name: map['name'] as String,
+    size: map['size'] != null ? map['size'] as int : null,
+    mimeType: map['mimeType'] != null ? map['mimeType'] as String : null,
+    base64: map['base64'] as String,
+    lastModified: map['lastModified'] != null ? map['lastModified'] as int : null,
+    lastModifiedDate: map['lastModifiedDate'] != null
+        ? DateTime.tryParse(map['lastModifiedDate'] as String)
+        : null,
+  );
 
-  factory HtmlEditorFile.fromJson(String source) => HtmlEditorFile.fromMap(
-        json.decode(source) as Map<String, dynamic>,
-      );
+  factory HtmlEditorFile.fromJson(String source) =>
+      HtmlEditorFile.fromMap(json.decode(source) as Map<String, dynamic>);
 
   HtmlEditorFile copyWith({
     String? name,
@@ -67,18 +66,19 @@ class HtmlEditorFile {
   }
 
   Map<String, dynamic> toMap() => {
-        'name': name,
-        'size': size,
-        'mimeType': mimeType,
-        'base64': base64,
-        'lastModified': lastModified,
-        'lastModifiedDate': lastModifiedDate?.millisecondsSinceEpoch,
-      };
+    'name': name,
+    'size': size,
+    'mimeType': mimeType,
+    'base64': base64,
+    'lastModified': lastModified,
+    'lastModifiedDate': lastModifiedDate?.millisecondsSinceEpoch,
+  };
 
   String toJson() => json.encode(toMap());
 
   @override
-  String toString() => """HtmlEditorFile(
+  String toString() =>
+      """HtmlEditorFile(
   name: $name, 
   size: $size, 
   mimeType: $mimeType, 

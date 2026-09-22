@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import 'core/editor_event.dart';
 import 'core/editor_selection_state.dart';
@@ -58,8 +57,8 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   /// Get the processed html value of the editor.
   String get processedHtml =>
       (html.isEmpty || html == '<p></p>' || html == '<p><br></p>' || html == '<p><br/></p>')
-          ? ""
-          : html;
+      ? ""
+      : html;
 
   /// Getter which returns the count of the human readable characters.
   ///
@@ -129,14 +128,11 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
   void clearFocus() => sendEvent(const EditorClearFocus());
 
   /// Insert text at the end of the current HTML content in the editor.
-  void insertText({required String text}) => sendEvent(
-        EditorInsertText(payload: text),
-      );
+  void insertText({required String text}) => sendEvent(EditorInsertText(payload: text));
 
   /// Paste html code into the editor.
-  void pasteHtml({required String html}) => sendEvent(
-        EditorPasteHtml(payload: processHtml(html: html)),
-      );
+  void pasteHtml({required String html}) =>
+      sendEvent(EditorPasteHtml(payload: processHtml(html: html)));
 
   /// Move the cursor at the end of the current content.
   void setCursorToEnd() => sendEvent(const EditorSetCursorToEnd());
@@ -159,10 +155,10 @@ class HtmlEditorController extends ValueNotifier<HtmlEditorValue> {
       html = kIsWeb
           ? html.replaceAll('\r', '').replaceAll('\r\n', '')
           : html
-              .replaceAll("'", r"\'")
-              .replaceAll('"', r'\"')
-              .replaceAll('\r', '')
-              .replaceAll('\r\n', '');
+                .replaceAll("'", r"\'")
+                .replaceAll('"', r'\"')
+                .replaceAll('\r', '')
+                .replaceAll('\r\n', '');
     }
     if (processNewLineAsBr) {
       html = html.replaceAll('\n', '<br/>').replaceAll('\n\n', '<br/>');

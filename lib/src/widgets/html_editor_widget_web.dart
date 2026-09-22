@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_string_escapes
+// ignore_for_file: use_build_context_synchronously, unnecessary_string_escapes, deprecated_member_use
 
 export 'dart:html';
 
@@ -73,7 +73,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
 
   void initSummernote() async {
     var headString = '';
-    var summernoteCallbacks = '''callbacks: {
+    var summernoteCallbacks =
+        '''callbacks: {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
             var totalChars = chars.length;
@@ -102,7 +103,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     for (var p in widget.plugins) {
       headString = '$headString${p.getHeadString()}\n';
       if (p is SummernoteAtMention) {
-        summernoteCallbacks = '''$summernoteCallbacks
+        summernoteCallbacks =
+            '''$summernoteCallbacks
             \nsummernoteAtMention: {
               getSuggestions: (value) => {
                 const mentions = ${p.getMentionsWeb()};
@@ -130,14 +132,16 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     }
     if (widget.callbacks != null) {
       if (widget.callbacks!.onImageLinkInsert != null) {
-        summernoteCallbacks = '''$summernoteCallbacks
+        summernoteCallbacks =
+            '''$summernoteCallbacks
           onImageLinkInsert: function(url) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
           },
         ''';
       }
       if (widget.callbacks!.onImageUpload != null) {
-        summernoteCallbacks = """$summernoteCallbacks
+        summernoteCallbacks =
+            """$summernoteCallbacks
           onImageUpload: function(files) {
             var reader = new FileReader();
             var base64 = "<an error occurred>";
@@ -169,7 +173,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         """;
       }
       if (widget.callbacks!.onImageUploadError != null) {
-        summernoteCallbacks = """$summernoteCallbacks
+        summernoteCallbacks =
+            """$summernoteCallbacks
               onImageUploadError: function(file, error) {
                 if (typeof file === 'string') {
                   window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onImageUploadError", "base64": file, "error": error}), "*");
@@ -195,14 +200,16 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
     var userScripts = '';
     if (widget.htmlEditorOptions.webInitialScripts != null) {
       for (var element in widget.htmlEditorOptions.webInitialScripts!) {
-        userScripts = '''$userScripts
+        userScripts =
+            '''$userScripts
           if (data["type"].includes("${element.name}")) {
             ${element.script}
           }'\n'
         ''';
       }
     }
-    var summernoteScripts = """
+    var summernoteScripts =
+        """
       <script type="text/javascript">
         \$(document).ready(function () {
           \$('#summernote-2').summernote({
@@ -457,7 +464,8 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         .replaceFirst('"summernote-lite.min.js"', '"assets/$_assetsPath/summernote-lite.min.js"');
     if (widget.callbacks != null) addJSListener(widget.callbacks!);
     final iframe = html.IFrameElement()
-      ..width = MediaQuery.of(widget.initBC).size.width.toString() //'800'
+      ..width = MediaQuery.of(widget.initBC).size.width
+          .toString() //'800'
       ..height = widget.htmlEditorOptions.autoAdjustHeight
           ? actualHeight.toString()
           : widget.otherOptions.height.toString()
@@ -504,8 +512,11 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             }
             if (widget.htmlEditorOptions.shouldEnsureVisible &&
                 Scrollable.maybeOf(context) != null) {
-              Scrollable.maybeOf(context)!.position.ensureVisible(context.findRenderObject()!,
-                  duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+              Scrollable.maybeOf(context)!.position.ensureVisible(
+                context.findRenderObject()!,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeIn,
+              );
             }
           }
           if (data['type'] != null &&
@@ -536,31 +547,35 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                   key: toolbarKey,
                   controller: widget.controller,
                   htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
+                  callbacks: widget.callbacks,
+                )
               : const SizedBox(height: 0, width: 0),
           Expanded(
-              child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: FutureBuilder<bool>(
-                      future: summernoteInit,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return HtmlElementView(
-                            viewType: createdViewId,
-                          );
-                        } else {
-                          return Container(
-                              height: widget.htmlEditorOptions.autoAdjustHeight
-                                  ? actualHeight
-                                  : widget.otherOptions.height);
-                        }
-                      }))),
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: FutureBuilder<bool>(
+                future: summernoteInit,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return HtmlElementView(viewType: createdViewId);
+                  } else {
+                    return Container(
+                      height: widget.htmlEditorOptions.autoAdjustHeight
+                          ? actualHeight
+                          : widget.otherOptions.height,
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           widget.htmlToolbarOptions.toolbarPosition == ToolbarPosition.belowEditor
               ? ToolbarWidget(
                   key: toolbarKey,
                   controller: widget.controller,
                   htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
+                  callbacks: widget.callbacks,
+                )
               : const SizedBox(height: 0, width: 0),
         ],
       ),
@@ -571,91 +586,104 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
   String getJsCallbacks(Callbacks c) {
     var callbacks = '';
     if (c.onBeforeCommand != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
           });\n
         """;
     }
     if (c.onChangeCodeview != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeCodeview", "contents": contents}), "*");
           });\n
         """;
     }
     if (c.onDialogShown != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.dialog.shown', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onDialogShown"}), "*");
           });\n
         """;
     }
     if (c.onEnter != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.enter', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onEnter"}), "*");
           });\n
         """;
     }
     if (c.onFocus != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.focus', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFocus"}), "*");
           });\n
         """;
     }
     if (c.onBlur != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.blur', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlur"}), "*");
           });\n
         """;
     }
     if (c.onBlurCodeview != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.blur.codeview', function() {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlurCodeview"}), "*");
           });\n
         """;
     }
     if (c.onKeyDown != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.keydown', function(_, e) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (c.onKeyUp != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.keyup', function(_, e) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
           });\n
         """;
     }
     if (c.onMouseDown != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.mousedown', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseDown"}), "*");
           });\n
         """;
     }
     if (c.onMouseUp != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.mouseup', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseUp"}), "*");
           });\n
         """;
     }
     if (c.onPaste != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.paste', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onPaste"}), "*");
           });\n
         """;
     }
     if (c.onScroll != null) {
-      callbacks = """$callbacks
+      callbacks =
+          """$callbacks
           \$('#summernote-2').on('summernote.scroll', function(_) {
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScroll"}), "*");
           });\n
@@ -705,7 +733,7 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
             'name': data['name'],
             'size': data['size'],
             'type': data['mimeType'],
-            'base64': data['base64']
+            'base64': data['base64'],
           };
           var jsonStr = json.encode(map);
           var file = fileUploadFromJson(jsonStr);
@@ -714,31 +742,33 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
         if (data['type'].contains('onImageUploadError')) {
           if (data['base64'] != null) {
             c.onImageUploadError!.call(
-                null,
-                data['base64'],
-                data['error'].contains('base64')
-                    ? UploadError.jsException
-                    : data['error'].contains('unsupported')
-                        ? UploadError.unsupportedFile
-                        : UploadError.exceededMaxSize);
+              null,
+              data['base64'],
+              data['error'].contains('base64')
+                  ? UploadError.jsException
+                  : data['error'].contains('unsupported')
+                  ? UploadError.unsupportedFile
+                  : UploadError.exceededMaxSize,
+            );
           } else {
             var map = <String, dynamic>{
               'lastModified': data['lastModified'],
               'lastModifiedDate': data['lastModifiedDate'],
               'name': data['name'],
               'size': data['size'],
-              'type': data['mimeType']
+              'type': data['mimeType'],
             };
             var jsonStr = json.encode(map);
             var file = fileUploadFromJson(jsonStr);
             c.onImageUploadError!.call(
-                file,
-                null,
-                data['error'].contains('base64')
-                    ? UploadError.jsException
-                    : data['error'].contains('unsupported')
-                        ? UploadError.unsupportedFile
-                        : UploadError.exceededMaxSize);
+              file,
+              null,
+              data['error'].contains('base64')
+                  ? UploadError.jsException
+                  : data['error'].contains('unsupported')
+                  ? UploadError.unsupportedFile
+                  : UploadError.exceededMaxSize,
+            );
           }
         }
         if (data['type'].contains('onKeyDown')) {

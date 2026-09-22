@@ -7,8 +7,6 @@ class AppBarIconButton extends StatelessWidget {
   const AppBarIconButton({super.key, this.onPressed, required this.icon});
 
   @override
-  Widget build(BuildContext context) => IconButton(
-        icon: Icon(icon),
-        onPressed: onPressed,
-      );
+  Widget build(BuildContext context) =>
+      IconButton(icon: Icon(icon), onPressed: onPressed);
 }

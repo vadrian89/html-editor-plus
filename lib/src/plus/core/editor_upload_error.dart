@@ -12,26 +12,23 @@ class HtmlEditorUploadError {
   /// The file which was uploaded.
   final HtmlEditorFile file;
 
-  HtmlEditorUploadError({
-    required this.error,
-    required this.file,
-  });
+  HtmlEditorUploadError({required this.error, required this.file});
 
-  factory HtmlEditorUploadError.fromJson(String source) => HtmlEditorUploadError.fromMap(
-        json.decode(source) as Map<String, dynamic>,
-      );
+  factory HtmlEditorUploadError.fromJson(String source) =>
+      HtmlEditorUploadError.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory HtmlEditorUploadError.fromMap(Map<String, dynamic> map) => HtmlEditorUploadError(
-        error: _uploadErrorFromString(map['error'] as String),
-        file: HtmlEditorFile.fromJson(map['file'] as String),
-      );
+    error: _uploadErrorFromString(map['error'] as String),
+    file: HtmlEditorFile.fromJson(map['file'] as String),
+  );
 
   static UploadError _uploadErrorFromString(String error) => error.contains('base64')
       ? UploadError.jsException
       : (error.contains('unsupported') ? UploadError.unsupportedFile : UploadError.exceededMaxSize);
 
   @override
-  String toString() => """HtmlEditorUploadError(
+  String toString() =>
+      """HtmlEditorUploadError(
   error: $error, 
   file: $file,
 )""";

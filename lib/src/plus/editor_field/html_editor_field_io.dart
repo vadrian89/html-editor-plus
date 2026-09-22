@@ -155,7 +155,8 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
       jsInitBuilder: widget.jsInitBuilder,
     );
     _eventsSubscription = _controller.events.listen(_adapter.handleEvent);
-    _initialOptions = widget.inAppWebViewSettings ??
+    _initialOptions =
+        widget.inAppWebViewSettings ??
         InAppWebViewSettings(
           javaScriptEnabled: true,
           transparentBackground: true,
@@ -181,31 +182,29 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
 
   @override
   Widget build(BuildContext context) => InAppWebView(
-        key: ValueKey("webview_key_$_viewId"),
-        initialFile: _filePath,
-        onWebViewCreated: (controller) => _adapter.webviewController = controller,
-        onLoadStop: (controller, url) => _adapter.loadSummernote(theme: Theme.of(context)),
-        onReceivedError: (controller, request, error) => debugPrint(
-          "message: ${error.description}",
-        ),
-        initialSettings: _initialOptions,
-        shouldOverrideUrlLoading: (controller, action) async {
-          if (action.request.url.toString().contains(_filePath)) {
-            return NavigationActionPolicy.ALLOW;
-          }
-          if (widget.allowUrlLoading != null) {
-            return (await widget.allowUrlLoading!(action.request.url))
-                ? NavigationActionPolicy.ALLOW
-                : NavigationActionPolicy.CANCEL;
-          }
-          return NavigationActionPolicy.ALLOW;
-        },
-        gestureRecognizers: {
-          Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
-          Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
-        },
-        onConsoleMessage: (controller, message) => debugPrint(message.message),
-      );
+    key: ValueKey("webview_key_$_viewId"),
+    initialFile: _filePath,
+    onWebViewCreated: (controller) => _adapter.webviewController = controller,
+    onLoadStop: (controller, url) => _adapter.loadSummernote(theme: Theme.of(context)),
+    onReceivedError: (controller, request, error) => debugPrint("message: ${error.description}"),
+    initialSettings: _initialOptions,
+    shouldOverrideUrlLoading: (controller, action) async {
+      if (action.request.url.toString().contains(_filePath)) {
+        return NavigationActionPolicy.ALLOW;
+      }
+      if (widget.allowUrlLoading != null) {
+        return (await widget.allowUrlLoading!(action.request.url))
+            ? NavigationActionPolicy.ALLOW
+            : NavigationActionPolicy.CANCEL;
+      }
+      return NavigationActionPolicy.ALLOW;
+    },
+    gestureRecognizers: {
+      Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
+      Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
+    },
+    onConsoleMessage: (controller, message) => debugPrint(message.message),
+  );
 
   void _onChange(String value) {
     _controller.html = value;

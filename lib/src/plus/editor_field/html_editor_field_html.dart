@@ -159,16 +159,16 @@ class _HtmlEditorFieldState extends State<HtmlEditorField> {
 
   @override
   Widget build(BuildContext context) => FutureBuilder<void>(
-        key: ValueKey("webview_key_$_viewId"),
-        future: _initFuture,
-        builder: (context, snapshot) => switch (snapshot.connectionState) {
-          ConnectionState.done => Directionality(
-              textDirection: TextDirection.ltr,
-              child: HtmlElementView(viewType: _viewId),
-            ),
-          _ => const SizedBox.shrink(),
-        },
-      );
+    key: ValueKey("webview_key_$_viewId"),
+    future: _initFuture,
+    builder: (context, snapshot) => switch (snapshot.connectionState) {
+      ConnectionState.done => Directionality(
+        textDirection: TextDirection.ltr,
+        child: HtmlElementView(viewType: _viewId),
+      ),
+      _ => const SizedBox.shrink(),
+    },
+  );
 
   void _onChange(String value) {
     _controller.html = value;
