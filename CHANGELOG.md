@@ -1,3 +1,22 @@
+## [0.0.8] = 2026-09-22
+* Updated plugin and demo to use Flutter 3.44.9
+* Raised Dart SDK requirement to >=3.8.0 <4.0.0 and Flutter to >=3.44.0
+* Updated demo Android Gradle plugin to version 9.0.1
+* Updated demo Gradle wrapper to version 9.1.0
+* Updated demo Kotlin to version 2.3.20
+* Updated demo target/compile SDK to 37
+* Updated demo minSdk to 24
+* Updated demo Java version to 17
+* Migrated demo Android build to AGP 9's built-in Kotlin support
+* Updated equatable dependency to version ^3.0.0
+* Updated file_picker dependency to version ^13.1.0 and migrated to the new FilePicker.pickFile/PlatformFile API
+* Updated flex_color_picker dependency to version ^3.8.0
+* Updated flutter_inappwebview dependency to version ^6.2.0-beta.3, required for AGP 9 compatibility
+* Updated flutter_keyboard_visibility dependency to version ^7.0.1
+* Updated flutter_lints dev dependency to version ^6.0.0
+* Fixed web build: platformViewRegistry moved from dart:ui to dart:ui_web
+* Replaced deprecated APIs (withValues instead of withOpacity, toARGB32 instead of Color.value, dialogTheme.backgroundColor) and fixed linter issues
+
 ## [0.0.7] = 2024-07-09
 * Updated plugin and demo to use Flutter 3.32
 * Updated demo gradle plugin to version 8.11.2
