@@ -6,7 +6,7 @@ import 'package:html_editor_plus/html_editor.dart';
 
 import 'plus/example_scaffold.dart';
 
-void main() => runApp(const HtmlEditorExampleApp(showPlusExample: true));
+void main() => runApp(const HtmlEditorExampleApp(showPlusExample: false));
 
 class HtmlEditorExampleApp extends StatelessWidget {
   final bool showPlusExample;
